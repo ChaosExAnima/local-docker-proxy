@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+    traefik:
+        image: traefik:alpine
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8080:8080"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./traefik.toml:/etc/traefik/traefik.toml:ro
+            - ./log:/etc/traefik/log
+            - ./keys:/etc/traefik/keys:ro
+
+    memcached:
+        image: memcached:latest
+        container_name: memcached
+        restart: always
+
+    db:
+        image: mariadb
+        restart: always
+        container_name: db
+        volumes:
+            - "./.data/db:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+
+    dbadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        labels:
+            - "traefik.frontend.rule=Host:db.dev.com"
+
+networks:
+    default:
+        external:
+            name: dev
