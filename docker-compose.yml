@@ -11,28 +11,31 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./traefik.toml:/etc/traefik/traefik.toml:ro
-            - ./log:/etc/traefik/log
+            - ./.data/traefik/log/:/etc/traefik/log/
             - ./keys:/etc/traefik/keys:ro
 
     memcached:
         image: memcached:latest
-        container_name: memcached
+        container_name: main_memcached
         restart: always
 
     db:
-        image: mariadb
+        image: mariadb:latest
         restart: always
-        container_name: db
+        container_name: main_db
         volumes:
             - "./.data/db:/var/lib/mysql"
         environment:
-            MYSQL_ROOT_PASSWORD: password
+            MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
 
     dbadmin:
-        image: phpmyadmin/phpmyadmin
+        image: phpmyadmin/phpmyadmin:latest
         restart: always
         labels:
             - "traefik.frontend.rule=Host:db.dev.com"
+        environment:
+            PMA_USER: root
+            PMA_PASSWORD:
 
 networks:
     default:
