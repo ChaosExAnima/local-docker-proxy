@@ -2,38 +2,18 @@
 # Global configuration
 ################################################################
 
-# Enable debug mode
-#
-# Optional
-# Default: false
-#
 debug = false
 checkNewVersion = true
-
-# Log level
-#
-# Optional
-# Default: "ERROR"
-#
 logLevel = "ERROR"
-
-# Entrypoints to be used by frontends that do not specify any entrypoint.
-# Each frontend can specify its own entrypoints.
-#
-# Optional
-# Default: ["http"]
-#
 defaultEntryPoints = ["http", "https"]
+RootCAs = ["/etc/traefik/keys/dev.com/servercert.pem"]
 
-# Entrypoints definition
-#
-# Optional
-# Default:
+InsecureSkipVerify = true
+
 [entryPoints]
     [entryPoints.http]
     address = ":80"
 
-    # https is the default
     [entryPoints.https]
     address = ":443"
         [entryPoints.https.tls]
@@ -42,50 +22,11 @@ defaultEntryPoints = ["http", "https"]
             KeyFile = "/etc/traefik/keys/dev.com/serverkey.pem"
 
 
-# Traefik logs
-# Enabled by default and log to stdout
-#
-# Optional
-#
 [traefikLog]
+filePath = "log/error.log"
 
-# Sets the filepath for the traefik log. If not specified, stdout will be used.
-# Intermediate directories are created if necessary.
-#
-# Optional
-# Default: os.Stdout
-#
-filePath = "log/traefik.log"
-
-# Format is either "json" or "common".
-#
-# Optional
-# Default: "common"
-#
-# format = "common"
-
-# Enable access logs
-# By default it will write to stdout and produce logs in the textual
-# Common Log Format (CLF), extended with additional fields.
-#
-# Optional
-#
 [accessLog]
-
-# Sets the file path for the access log. If not specified, stdout will be used.
-# Intermediate directories are created if necessary.
-#
-# Optional
-# Default: os.Stdout
-#
-# filePath = "/path/to/log/log.txt"
-
-# Format is either "json" or "common".
-#
-# Optional
-# Default: "common"
-#
-# format = "common"
+filePath = "log/access.log"
 
 ################################################################
 # Web configuration backend
@@ -93,11 +34,6 @@ filePath = "log/traefik.log"
 
 # Enable web configuration backend
 [web]
-
-# Web administration port
-#
-# Required
-#
 address = ":8080"
 
 ################################################################
