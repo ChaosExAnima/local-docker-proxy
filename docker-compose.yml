@@ -28,11 +28,19 @@ services:
         environment:
             MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
 
+    mailcatcher:
+     image: schickling/mailcatcher
+     labels:
+       - "traefik.port=1080"
+       - "traefik.frontend.rule=Host:mail.dev.localhost"
+     environment:
+       MAILCATCHER_PORT: 1025
+
     dbadmin:
         image: phpmyadmin/phpmyadmin:latest
         restart: always
         labels:
-            - "traefik.frontend.rule=Host:db.dev.com"
+            - "traefik.frontend.rule=Host:db.dev.localhost"
         environment:
             PMA_USER: root
             PMA_PASSWORD:

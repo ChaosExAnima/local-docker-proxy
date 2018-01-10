@@ -20,6 +20,9 @@ InsecureSkipVerify = true
             [[entryPoints.https.tls.certificates]]
             CertFile = "/etc/traefik/keys/dev.com/servercert.pem"
             KeyFile = "/etc/traefik/keys/dev.com/serverkey.pem"
+            [[entryPoints.https.tls.certificates]]
+            CertFile = "/etc/traefik/keys/dev.localhost/servercert.pem"
+            KeyFile = "/etc/traefik/keys/dev.localhost/serverkey.pem"
 
 
 [traefikLog]

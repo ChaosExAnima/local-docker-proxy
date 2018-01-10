@@ -1,1 +1,2 @@
 V	200929065705Z		01	unknown	/C=US/ST=MD/L=Baltimore/O=Test CA, Limited/CN=*.dev.com
+V	201006220340Z		02	unknown	/C=US/ST=MD/L=Baltimore/O=Test CA, Limited/CN=dev.localhost
