@@ -19,6 +19,15 @@ services:
         container_name: main_memcached
         restart: always
 
+    mcadmin:
+        image: hitwe/phpmemcachedadmin
+        restart: always
+        depends_on:
+            - memcached
+        labels:
+            - "traefik.frontend.rule=Host:mem.dev.localhost"
+            - "traefik.frontend.redirect.entryPoint=https"
+
     db:
         image: mariadb:latest
         restart: always
@@ -27,23 +36,25 @@ services:
             - "./.data/db:/var/lib/mysql"
         environment:
             MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        labels:
+            - "traefik.port=3306"
+            - "traefik.frontend.rule=Host:dbmain.dev.localhost"
 
     mailcatcher:
-     image: schickling/mailcatcher
-     labels:
-       - "traefik.port=1080"
-       - "traefik.frontend.rule=Host:mail.dev.localhost"
-     environment:
-       MAILCATCHER_PORT: 1025
+        environment:
+            MAILCATCHER_PORT: 1025
+        image: schickling/mailcatcher
+        labels:
+            - "traefik.port=1080"
+            - "traefik.frontend.rule=Host:mail.dev.localhost"
+            - "traefik.frontend.redirect.entryPoint=https"
 
     dbadmin:
         image: phpmyadmin/phpmyadmin:latest
         restart: always
         labels:
             - "traefik.frontend.rule=Host:db.dev.localhost"
-        environment:
-            PMA_USER: root
-            PMA_PASSWORD:
+            - "traefik.frontend.redirect.entryPoint=https"
 
 networks:
     default:
